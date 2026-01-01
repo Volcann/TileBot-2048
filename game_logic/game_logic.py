@@ -19,7 +19,7 @@ class GameLogic:
         if max_value == 2:
             return random.choice([2, 4])
         elif max_value >= 1024:
-            min_value = 2
+            min_value = 4
             return self.random_choices(max_value, min_value)
         elif max_value >= 2048:
             min_value = 8
@@ -183,9 +183,11 @@ class GameLogic:
         if count == 2:
             value *= 2 
             self._matrix[row][column] = value
+            self._score = value
         elif count > 2:
             value *= 4 
             self._matrix[row][column] = value
+            self._score = value
         else:
             return False
 
