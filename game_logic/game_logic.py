@@ -42,31 +42,42 @@ class GameLogic:
 
     def rearrange(self, column=None):
         if column is None:
-            for col_index in range(GRID_WIDTH):
-                self.rearrange(col_index)
-            return
+            for i in range(GRID_LENGTH):
+                queue = Queue()
+                non_zero_value = 0
 
-        index = 0
-        total_non_zero_values = 0
+                for j in range(GRID_WIDTH):
+                    if self._matrix[j][i] == 0:
+                        continue
+                    else:
+                        queue.put(self._matrix[j][i])
 
-        queue = Queue()
-        while index < GRID_LENGTH:
-            if self._matrix[index][column] != 0:
-                queue.put(self._matrix[index][column])
-                total_non_zero_values += 1
-            index += 1
+                for j in range(GRID_WIDTH):
+                    self._matrix[j][i] = 0
 
-        index = 0
-        preserve_total_non_zero_values = total_non_zero_values
-        while total_non_zero_values > 0:
-            self._matrix[index][column] = queue.get()
-            total_non_zero_values -= 1
-            index += 1
+                non_zero_value = queue.qsize()
+                for j in range(non_zero_value):
+                    value = queue.get()
+                    if value > 0:
+                        self._matrix[j][i] = value
+        else:
+            queue = Queue()
+            non_zero_value = 0
 
-        index = preserve_total_non_zero_values
-        while index < GRID_LENGTH:
-            self._matrix[index][column] = 0
-            index += 1
+            for i in range(GRID_LENGTH):
+                if self._matrix[i][column] == 0:
+                    continue
+                else:
+                    queue.put(self._matrix[i][column])
+
+            for i in range(GRID_LENGTH):
+                self._matrix[i][column] = 0
+
+            non_zero_value = queue.qsize()
+            for i in range(non_zero_value):
+                value = queue.get()
+                if value > 0:
+                    self._matrix[i][column] = value
         return
 
     def can_merge_last_row(self, column, value):
